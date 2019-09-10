@@ -13,7 +13,6 @@ OBJ		= $(patsubst src/%.c,obj/%.o,$(SRC))
 all: $(NAME)
 
 $(NAME): $(OBJ) $(INCLUDES)
-		make -C libmalloc
 		gcc -Wall -Wextra -Werror -g $(LIB) $(OBJ) -o $(NAME)
 
 obj/%.o: src/%.c
@@ -23,11 +22,9 @@ obj/%.o: src/%.c
 
 clean:
 		/bin/rm -rf obj/
-		make -C libmalloc clean
 
 fclean: clean
 		/bin/rm -f $(NAME)
-		make -C libmalloc fclean
 
 re: fclean all
 

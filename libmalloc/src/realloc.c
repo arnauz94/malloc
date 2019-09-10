@@ -6,7 +6,7 @@
 /*   By: avinas <avinas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/20 16:42:06 by avinas            #+#    #+#             */
-/*   Updated: 2019/08/31 18:20:23 by avinas           ###   ########.fr       */
+/*   Updated: 2019/09/10 18:44:39 by avinas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,10 @@ t_page	*anotherplace(t_page *actual, size_t size)
 
 	if ((ret = malloc(size)) == NULL)
 		return (NULL);
-	ret = memcpy(ret, actual->data, actual->size);
+	if (actual->size < size)
+		ret = ft_memcpy(ret, actual->data, actual->size);
+	else
+		ret = ft_memcpy(ret, actual->data, size);
 	free(actual->data);
 	return (ret);
 }
@@ -59,10 +62,8 @@ void	*realloc(void *ptr, size_t size)
 	t_page *actual;
 
 	size = ALIGN16(size);
-	if (ptr == NULL)
-		return (malloc(size));
 	if ((actual = getactualblock(ptr)) == NULL)
-		return (NULL);
+		return (malloc(size));
 	if (actual->size > size)
 		return (smaller(actual, size));
 	if (get_type(actual->size) != get_type(size))
@@ -71,12 +72,15 @@ void	*realloc(void *ptr, size_t size)
 		return (anotherplace(actual, size));
 	if (!actual->next->isfree)
 		return (anotherplace(actual, size));
-	if (actual->size + actual->next->size + sizeof(t_page) < size)
+	if (actual->size + actual->next->size < size)
 		return (anotherplace(actual, size));
-	actual->size += actual->next->size + sizeof(t_page);
-	actual->next = actual->next->next;
 	if (actual->next != NULL)
-		actual->next->prev = actual;
-	actual->isfree = 1;
+		if (actual->next->isfree == 1)
+		{
+			actual->size += actual->next->size + sizeof(t_page);
+			actual->next = actual->next->next;
+			if (actual->next != NULL)
+				actual->next->prev = actual;
+		}
 	return (alloc(actual, size));
 }
