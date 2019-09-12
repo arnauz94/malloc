@@ -6,7 +6,7 @@
 /*   By: avinas <avinas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/06 18:13:13 by avinas            #+#    #+#             */
-/*   Updated: 2019/09/10 18:47:57 by avinas           ###   ########.fr       */
+/*   Updated: 2019/09/12 16:23:23 by avinas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ t_page	*defrag(t_page *ret)
 	return (ret);
 }
 
-void	free(void *ptr)
+void	ft_free(void *ptr)
 {
 	t_page *ret;
 
@@ -95,4 +95,11 @@ void	free(void *ptr)
 		}
 		ret = ret->next;
 	}
+}
+
+void	free(void *ptr)
+{
+	pthread_mutex_lock(&g_mutex);
+	ft_free(ptr);
+	pthread_mutex_unlock(&g_mutex);
 }

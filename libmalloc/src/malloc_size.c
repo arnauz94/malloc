@@ -1,45 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   malloc.c                                           :+:      :+:    :+:   */
+/*   malloc_size.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: avinas <avinas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/06/07 11:35:43 by avinas            #+#    #+#             */
-/*   Updated: 2019/09/12 16:23:45 by avinas           ###   ########.fr       */
+/*   Created: 2019/09/12 15:34:23 by avinas            #+#    #+#             */
+/*   Updated: 2019/09/12 16:24:01 by avinas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include "../include/libmalloc.h"
 #include "../include/page_manager.h"
 #include "../include/allocator.h"
+#include "../include/utils_type.h"
 
-void	*ft_malloc(size_t size)
+size_t	malloc_size(const void *ptr)
 {
-	void	*ret;
-	t_page	*page;
+	t_page *ret;
 
-	ret = NULL;
-	size = ALIGN16(size);
-	if ((page = searchfreepage(size)) != NULL)
+	ret = *getfirstpage();
+	if (ret == NULL)
+		return (0);
+	while (ret)
 	{
-		return (alloc(page, size));
+		if (ret->data == ptr && !ret->isfree)
+		{
+			return (ret->size);
+		}
+		ret = ret->next;
 	}
-	createpage(size);
-	if ((page = searchfreepage(size)) != NULL)
-	{
-		return (alloc(page, size));
-	}
-	return (ret);
+	return (0);
 }
 
-void	*malloc(size_t size)
+size_t	malloc_good_size(size_t size)
 {
-	void	*ptr;
-
-	pthread_mutex_lock(&g_mutex);
-	ptr = ft_malloc(size);
-	pthread_mutex_unlock(&g_mutex);
-	return (ptr);
+	return (ALIGN16(size));
 }

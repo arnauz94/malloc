@@ -6,7 +6,7 @@
 #    By: avinas <avinas@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/11 21:50:19 by avinas            #+#    #+#              #
-#    Updated: 2019/08/31 15:31:30 by avinas           ###   ########.fr        #
+#    Updated: 2019/09/12 16:56:14 by avinas           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,9 @@ SRC=   		src/allocator.c			\
             src/page_manager.c		\
 			src/realloc.c			\
 			src/show_alloc_mem.c	\
-			src/utils_type.c
+			src/utils_type.c		\
+			src/malloc_size.c		\
+			src/reallocf.c
 
 OBJ     = $(patsubst src/%.c,obj/%.o,$(SRC))
 

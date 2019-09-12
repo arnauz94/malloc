@@ -6,7 +6,7 @@
 /*   By: avinas <avinas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/07 10:26:32 by avinas            #+#    #+#             */
-/*   Updated: 2019/09/09 11:50:26 by avinas           ###   ########.fr       */
+/*   Updated: 2019/09/12 16:51:56 by avinas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ int	main(void)
 	char	*total;
 	char	*tmp;
 
-	show_alloc_mem();
 	total = ft_strnew(1);
 	fd = open("../srcs/main.c", O_RDONLY);
 	while (get_next_line(fd, &line) == 1)
@@ -39,9 +38,11 @@ int	main(void)
 	}
 	ft_putstr(total);
 	show_alloc_mem();
+	ft_putstr("\n");
+	ft_putnbr(malloc_size(total));
+	ft_putstr("\n");
+	ft_putnbr(malloc_good_size(42));
 	ft_strdel(&total);
 	close(fd);
 	fd = 0;
-	ft_putstr("\n---------------------\n");
-	show_alloc_mem();
 }
